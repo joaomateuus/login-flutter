@@ -1,4 +1,29 @@
+import 'package:first_project_dio/model/user.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+
+Future<User> createUser(User userData) async {
+  final response = await http.post(
+    Uri.parse('http://localhost:3000/account/auth/signup'),
+    headers: <String, String> {
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String> {
+      'email': userData.email,
+      'username': userData.username,
+      'password': userData.password,
+    })
+  );
+
+  if (response.statusCode == 201) {
+    return User.fromJson(jsonDecode(response.body));
+  } else {
+    throw Exception('Failed to create user');
+  }
+}
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({ Key? key }) : super(key: key);
@@ -10,17 +35,34 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   String username = '';
   String email = '';
-  String passowrd = '';
+  String password = '';
   String confirmPassword = '';
 
+  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+
   void handleSubmit() {
-    if(passowrd != confirmPassword) {
-      print('Passwords do not match');
-      return;
-    }
+    username = usernameController.text;
+    email = emailController.text;
+    password = passwordController.text;
+    confirmPassword = confirmPasswordController.text;
 
     print(username);
     print(email);
+
+    if(password != confirmPassword) {
+      print('Passwords do not match');
+      return;
+    }
+    User userData = User(
+      username: username,
+      email: email,
+      password: password
+    );
+
+    createUser(userData);
   }
 
   @override
@@ -48,7 +90,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         isDense: true, 
                       ),
-                      onChanged: (value) => setState(() => username = value),
+                      controller: usernameController,
                     ),
               ),
 
@@ -63,7 +105,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         isDense: true, 
                       ),
-                      onChanged: (value) => setState(() => email = value),
+                      controller: emailController,
                     ),
               ),
                 
@@ -78,7 +120,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         isDense: true, 
                       ),
-                      onChanged: (value) => setState(() => passowrd = value),
+                      controller: passwordController,
                     ),
               ),
 
@@ -93,7 +135,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         isDense: true, 
                       ),
-                      onChanged: (value) => setState(() => confirmPassword = value),
+                      controller: confirmPasswordController,
                     ),
               ),
               

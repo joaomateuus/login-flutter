@@ -15,11 +15,16 @@ class Login extends StatefulWidget {
 class _LoginPageState extends State<Login> {
   String username = '';
   String password = '';
+  final nomeController = TextEditingController();
+  final passwordController = TextEditingController();
 
   void handleSubmit(
     String username,
     String password
   ) {
+    username = nomeController.text;
+    password = passwordController.text;
+    
     print(username);
     print(password);
     Navigator.pushNamed(context, '/home');
@@ -38,49 +43,42 @@ class _LoginPageState extends State<Login> {
             widget.title,
           ),
       ),
-      body: Form(
-        child: Center(
+      body: SizedBox(
+        height: 300,
+        width: double.infinity,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Container(
-                constraints: const BoxConstraints(maxWidth: 310),
-                margin: const EdgeInsets.only(top: 10.0),
-                child: TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Username',
-                        contentPadding: EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 12.0
-                        ),
-                        isDense: true, 
-                      ),
-                      onChanged: (value) => setState(() => username = value),
-                    ),
-              ),
-                
-              Container(
-                constraints: const BoxConstraints(maxWidth: 310),
-                margin: const EdgeInsets.only(top: 10.0),
-                child: TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Password',
-                        contentPadding: EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 12.0
-                        ),
-                        isDense: true, 
-                      ),
-                      onChanged: (value) => setState(() => password = value),
-                    ),
-              ),
-              
-              Container(
-                margin: const EdgeInsets.only(top: 30.0),
-                child: SizedBox(
-                    width: 250,
-                    child: ElevatedButton(
-                      onPressed: () => handleSubmit(username, password),
-                      child: const Text('Login'),
+              TextFormField(
+                decoration: const InputDecoration(
+                  labelText: 'Username',
+                  contentPadding: EdgeInsets.symmetric(
+                    vertical: 10.0, horizontal: 12.0
                   ),
+                  isDense: true, 
+                ),
+                  controller: nomeController,
+              ),
+          
+              TextFormField(
+                decoration: const InputDecoration(
+                  labelText: 'Password',
+                  contentPadding: EdgeInsets.symmetric(
+                    vertical: 10.0, horizontal: 12.0
+                  ),
+                  isDense: true, 
+                ),
+                  controller: passwordController,
+              ),
+       
+              Container(
+                margin: const EdgeInsets.only(top: 5.0),
+                width: 250,
+                child: ElevatedButton(
+                  onPressed: () => handleSubmit(username, password),
+                  child: const Text('Login'),
                 ), 
               ),
 
@@ -97,8 +95,8 @@ class _LoginPageState extends State<Login> {
                 ), 
               )
             ],
+        ), 
         ),
-        )
       ),
     );
   }
