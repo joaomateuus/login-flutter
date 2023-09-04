@@ -1,4 +1,4 @@
-import 'package:first_project_dio/model/user_model.dart';
+import 'package:first_project_dio/model/user.dart';
 import 'package:first_project_dio/repository/user_repository.dart';
 
 abstract class RegisterViewModel {

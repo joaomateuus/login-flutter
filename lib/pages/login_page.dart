@@ -1,12 +1,12 @@
+import 'package:first_project_dio/pages/home_page.dart';
+import 'package:first_project_dio/viewmodel/login_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:first_project_dio/model/user_session.dart';
+
 
 class Login extends StatefulWidget {
-  const Login({
-    super.key,
-    required this.title
-  });
+  const Login({ Key? key }) : super(key: key);
 
-  final String title;
 
   @override
   State<Login> createState() => _LoginPageState();
@@ -17,30 +17,52 @@ class _LoginPageState extends State<Login> {
   String password = '';
   final nomeController = TextEditingController();
   final passwordController = TextEditingController();
+  final loginViewModel = LoginViewModelImpl();
+
+  @override
+  void initState() {
+    super.initState();
+    UserSession.hasSession() ? handleHomeRedirect() : null;
+  }
+ 
 
   void handleSubmit(
     String username,
     String password
-  ) {
-    username = nomeController.text;
-    password = passwordController.text;
     
-    print(username);
-    print(password);
-    Navigator.pushNamed(context, '/home');
+  ) async {
+    loginViewModel.username = nomeController.text;
+    loginViewModel.password = passwordController.text;
+
+    bool response = await loginViewModel.login();
+
+    if(response) {
+      loginViewModel.resetFields();
+      handleHomeRedirect();
+    }
+
+    // print(username);
+    // print(password);
+    // Navigator.pushNamed(context, '/home');
   }
 
   void handleSignUpRedirect() {
     Navigator.pushNamed(context, '/register');
   }
 
+  void handleHomeRedirect() {
+    Navigator.pushReplacement(context,MaterialPageRoute(builder: (BuildContext context) => const HomePage()));
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(
-            widget.title,
+        title: const Text(
+            'Login',
           ),
       ),
       body: SizedBox(

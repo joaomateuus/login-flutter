@@ -1,3 +1,5 @@
+import 'package:first_project_dio/model/user_session.dart';
+import 'package:first_project_dio/pages/login_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -8,7 +10,8 @@ class HomePage extends StatefulWidget {
 }
 
 void logout(BuildContext context) {
-  Navigator.pushNamed(context, '/');
+  UserSession.clearSession();
+  Navigator.pushReplacement(context,MaterialPageRoute(builder: (BuildContext context) => const Login()));
 }
 
 

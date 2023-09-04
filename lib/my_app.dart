@@ -1,3 +1,4 @@
+import 'package:first_project_dio/model/user_session.dart';
 import 'package:first_project_dio/pages/home_page.dart';
 import 'package:first_project_dio/pages/login_page.dart';
 import 'package:first_project_dio/pages/register_page.dart';
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Login(title: 'Login'),
+      home: UserSession.hasSession() ? const HomePage() : const Login(),
     );
   }
 }
